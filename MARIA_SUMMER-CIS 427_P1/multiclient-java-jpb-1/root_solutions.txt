@@ -1,0 +1,8 @@
+radius 3: Circle’s circumference is 18.85 and area is 28.27
+radius 4: Circle’s circumference is 25.13 and area is 50.27
+radius 10: Circle’s circumference is 62.83 and area is 314.16
+radius 22: Circle’s circumference is 138.23 and area is 1520.53
+sides 2 2: Rectangle’s perimeter is 8.00 and area is 4.00
+sides 12 12: Rectangle’s perimeter is 48.00 and area is 144.00
+radius 10: Circle’s circumference is 62.83 and area is 314.16radius 10: Circle’s circumference is 62.83 and area is 314.16radius 5: Circle’s circumference is 31.42 and area is 78.54radius 10: Circle’s circumference is 62.83 and area is 314.16radius 11: Circle’s circumference is 69.12 and area is 380.13radius 88: Circle’s circumference is 552.92 and area is 24328.49radius 99: Circle’s circumference is 622.04 and area is 30790.75radius 100: Circle’s circumference is 628.32 and area is 31415.93
+radius 1: Circle’s circumference is 6.28 and area is 3.14

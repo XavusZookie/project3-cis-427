@@ -1,22 +1,43 @@
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
-//server class to create socket/port connection with client, as well as all the commands to be executed by client
-public class Server {
-    
-    //variables
-    private static ArrayList<String> logins = new ArrayList<>();
-    static boolean loggedIn = false;
-    static String user = "";
-    static BufferedWriter bw = null;
 
-    //main
-    public static void main(String args[]) {
+//Runnable class allows us to create a task
+//to be run on a thread
+public class ClientHandler implements Runnable {
+    private Socket socket;  //connected socket
+    private ServerSocket serverSocket;  //server's socket
+    private int clientNumber;
+    
+    //create an instance
+    public ClientHandler(int clientNumber, Socket socket, ServerSocket serverSocket) {
+        this.socket = socket;
+        this.serverSocket = serverSocket;
+        this.clientNumber = clientNumber;
+    }//end ctor
+    
+    
+    private static ArrayList<String> logins = new ArrayList<>();
+    boolean loggedIn = false;
+    String user = "";
+    BufferedWriter bw = null;
+    //run() method is required by all
+    //Runnable implementers
+    @Override
+    public void run() {
+        
         readData();
+        //run the thread in here
         try {
-            ServerSocket ss = new ServerSocket(9034);
-            Socket s = ss.accept();
+            ServerSocket ss = this.serverSocket;
+            Socket s = this.socket;
             DataInputStream din = new DataInputStream(s.getInputStream()); //input variable
             DataOutputStream dout = new DataOutputStream(s.getOutputStream()); //output variable
             String str = "";
@@ -25,10 +46,12 @@ public class Server {
             //while loop, checks if "LOGIN" is correctly done (based on usernames/password in "logins.txt" folder)
             while (true) {
                 str = din.readUTF();
+                
                 if (loggedIn == false && str.startsWith("LOGIN"))
                 {
                     String u = str.split(" ")[1];
                     String p = str.split(" ")[2];
+                    
                     if (logins.contains(u + " " + p)) {
                         loggedIn = true;
                         user = u;
@@ -65,13 +88,13 @@ public class Server {
                                 int radius = Integer.parseInt(shape[2]);
                                 double circum = 2 * Math.PI * radius;
                                 double area = Math.PI * radius * radius;
-
+                               
                                 dout.writeUTF("Circle’s circumference is " + String.format("%.2f", circum)
                                         + " and area is " + String.format("%.2f", area));
                               //  dout.flush();
-                                bw.write("radius " + radius + ": Circle’s circumference is " + String.format("%.2f", circum)
+                                bw.write("\nradius " + radius + ": Circle’s circumference is " + String.format("%.2f", circum)
                                         + " and area is " + String.format("%.2f", area));
-                                bw.newLine();
+                                //bw.newLine();
                                 bw.close();
                             } else {
                                 dout.writeUTF("Error: No radius found");
@@ -87,11 +110,10 @@ public class Server {
                                 int length = Integer.parseInt(shape[2]);
                                 double perimeter = 2 * (length + length);
                                 double area = length * length;
-
                                 dout.writeUTF("Rectangle’s perimeter is " + String.format("%.2f", perimeter)
                                         + " and area is " + String.format("%.2f", area));
                                 dout.flush();
-                                bw.write("sides " + length + " " + length + ": Rectangle’s perimeter is " + String.format("%.2f", perimeter)
+                                bw.write("\nsides " + length + " " + length + ": Rectangle’s perimeter is " + String.format("%.2f", perimeter)
                                         + " and area is " + String.format("%.2f", area));
                                 bw.newLine();
                                 bw.close();
@@ -104,14 +126,14 @@ public class Server {
                                 dout.writeUTF("Rectangle’s perimeter is " + String.format("%.2f", perimeter)
                                         + " and area is " + String.format("%.2f", area));
                                 dout.flush();
-                                bw.write("sides " + length + " " + width + ": Rectangle’s perimeter is " + String.format("%.2f", perimeter)
+                                bw.write("\nsides " + length + " " + width + ": Rectangle’s perimeter is " + String.format("%.2f", perimeter)
                                         + " and area is " + String.format("%.2f", area));
                                 bw.newLine();
                                 bw.close();
                             } else {
                                 dout.writeUTF("Error: No sides found");
                                 dout.flush();
-                                bw.write("Error: No sides found");
+                                bw.write("\nError: No sides found");
                                 bw.newLine();
                                 bw.close();
                             }
@@ -166,18 +188,17 @@ public class Server {
                     }
                 }
             }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            System.exit(0);
         }
-    }
-
-    //function to read data from logins.txt file
+        catch(IOException ex) {
+            ex.printStackTrace();
+        }//end try-catch
+        
+    }//end run
     public static void readData() {
         try {
             //directory to computer, directory has to be changed 
             //if being ran on another computer to the directory of that logins.txt file
-            Scanner in = new Scanner(new File("C:\\Users\\salra\\IdeaProjects\\JavaProject1\\logins.txt")); 
+            Scanner in = new Scanner(new File("D:\\Cis\\CIS 427 networks\\CIS-427-Project-1\\MARIA_SUMMER-CIS 427_P1\\logins.txt")); 
             while (in.hasNextLine()) {
                 String line = in.nextLine();
                 logins.add(line);
@@ -187,5 +208,5 @@ public class Server {
             System.exit(0);
         }
     }
-
-}
+    
+}//end ClientHandler

@@ -1,19 +1,36 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Scanner;
 import java.net.*;
 import java.io.*;
+import java.util.*;
 
-//Client class, created to connect with the server class, can't run without it
+public class ClientJPB1 {
+    
+    private static final int SERVER_PORT = 4999;
 
-public class Client {
-
-    public static void main(String args[]) {
+    public static void main(String[] args) {
+        
+        DataOutputStream toServer;
+        DataInputStream fromServer;
+        Scanner input = 
+                new Scanner(System.in);
+        String message;
+        
+        //attempt to connect to the server
         try {
-            Socket s = new Socket("localhost", 9034); //connecting to port
+            Socket s = new Socket("localhost", 4999); //connecting to port
             DataInputStream din = new DataInputStream(s.getInputStream()); //creating input variable
             DataOutputStream dout = new DataOutputStream(s.getOutputStream()); //creating output variable
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             
             //while loop to check connection
             String command = "", response = "";
+                            response = din.readUTF();
+                System.out.println(response);
+
             while (true) {
                 command = br.readLine();
                 dout.writeUTF(command);
@@ -26,10 +43,12 @@ public class Client {
                 }
                 System.out.println(response);
             }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            System.exit(0);
+             
         }
-    }
+        catch(IOException ex) {
+            ex.printStackTrace();
+        }//end try-catch
+        
+        
+    }//end main
 }
-
