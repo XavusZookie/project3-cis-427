@@ -198,7 +198,7 @@ public class ClientHandler implements Runnable {
         try {
             //directory to computer, directory has to be changed 
             //if being ran on another computer to the directory of that logins.txt file
-            Scanner in = new Scanner(new File("D:\\Cis\\CIS 427 networks\\CIS-427-Project-1\\MARIA_SUMMER-CIS 427_P1\\logins.txt")); 
+            Scanner in = new Scanner(new File("logins.txt")); 
             while (in.hasNextLine()) {
                 String line = in.nextLine();
                 logins.add(line);
