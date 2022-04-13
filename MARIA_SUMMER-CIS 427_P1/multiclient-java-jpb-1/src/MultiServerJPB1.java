@@ -10,7 +10,11 @@ import java.util.Date;
 
 public class MultiServerJPB1 {
     
-    private static final int SERVER_PORT = 4999;
+    private  static final int SERVER_PORT = 4999;
+    
+
+
+
     
     public static void main(String[] args) {
         //createCommunicationLoop();
@@ -42,6 +46,8 @@ public class MultiServerJPB1 {
                 Thread clientThread = new Thread(
                         new ClientHandler(clientNumber, socket, serverSocket));
                 clientThread.start();  
+                
+              
             }//end while           
         }
         catch(IOException ex) {
@@ -99,4 +105,6 @@ public class MultiServerJPB1 {
             ex.printStackTrace();
         }//end try-catch
     }//end createCommunicationLoop
+    
+    
 }

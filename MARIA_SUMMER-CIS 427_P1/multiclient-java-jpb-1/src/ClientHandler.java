@@ -9,12 +9,18 @@ import java.io.*;
 import java.util.*;
 
 
+
 //Runnable class allows us to create a task
 //to be run on a thread
 public class ClientHandler implements Runnable {
     private Socket socket;  //connected socket
     private ServerSocket serverSocket;  //server's socket
     private int clientNumber;
+    
+   
+    public static String who = " ";
+        public static String mess;
+                public static String from;
     
     //create an instance
     public ClientHandler(int clientNumber, Socket socket, ServerSocket serverSocket) {
@@ -34,6 +40,9 @@ public class ClientHandler implements Runnable {
     public void run() {
         
         readData();
+        
+        
+        
         //run the thread in here
         try {
             ServerSocket ss = this.serverSocket;
@@ -45,23 +54,55 @@ public class ClientHandler implements Runnable {
             
             //while loop, checks if "LOGIN" is correctly done (based on usernames/password in "logins.txt" folder)
             while (true) {
-                str = din.readUTF();
                 
-                if (loggedIn == false && str.startsWith("LOGIN"))
+                
+                
+                str = din.readUTF();
+                String l = str.split(" ")[0];
+                if (loggedIn == false && l.equalsIgnoreCase("login"))//str.startsWith("LOGIN"))
                 {
+                    
                     String u = str.split(" ")[1];
                     String p = str.split(" ")[2];
                     
                     if (logins.contains(u + " " + p)) {
                         loggedIn = true;
                         user = u;
+                        dout.writeUTF(user);
                         dout.writeUTF("SUCCESS\nPlease type 'SOLVE' followed by -c or -r (for circle or rectangle), and then the number and hit enter!"); //output message after sucessful login, instructing user on next steps
                         dout.flush();
                     } else {
+                        dout.writeUTF(" ");
                         dout.writeUTF("FAILURE: Please provide correct username and password. Try again"); //if login attempt with an account not in logins.txt
                         dout.flush();
                     }
                     continue;
+                }
+                
+                if(who.contains(user))
+                {
+                dout.writeUTF("message from :" + from + "\n" + mess);
+                        dout.flush();
+                        String msg[] = who.split(" ");
+        String new_str = "";
+ 
+        // Iterating the string using for each loop
+        for (String words : msg) {
+ 
+            // If desired word is found
+            if (!words.equals(user)) {
+ 
+                // Concat the word not equal to the given
+                // word
+                new_str += words + " ";
+            }
+        }
+        who = new_str;
+                }
+                else
+                {
+                    dout.writeUTF("no messages\n");
+                        dout.flush();
                 }
                 //shutdown command, system closes if "SHUTDOWN" is entered
                 if (loggedIn) {
@@ -73,13 +114,14 @@ public class ClientHandler implements Runnable {
                         ss.close();
                         System.exit(0);
                     }
+                    
                     //LOGOUT command
                     else if (str.equalsIgnoreCase("LOGOUT")) {
                         dout.writeUTF("200 ok");
                         dout.flush();
                     }
                     //SOLVE command
-                    else if (str.startsWith("SOLVE")) {
+                    else if (l.equalsIgnoreCase("solve")) {//str.startsWith("SOLVE")) {
                         bw = new BufferedWriter(new FileWriter(user + "_solutions.txt", true)); //creats a text file with username where every input is appended
                         String[] shape = str.split(" ");
                         //code for -c, circle, includes circumference + area formula and output messages
@@ -141,7 +183,7 @@ public class ClientHandler implements Runnable {
 
                     } 
                     //LIST command, outputs everything client logged in has ever done if they write "LIST"
-                    else if (str.startsWith("LIST")) {
+                    else if (l.equalsIgnoreCase("list")) {//str.startsWith("LIST")) {
                         if (str.equals("LIST")) {
                             Scanner sc = new Scanner(new File(user + "_solutions.txt"));
                             String result = user + "\n";
@@ -181,12 +223,67 @@ public class ClientHandler implements Runnable {
                             }
                         }
                     }
+                    else if (l.equalsIgnoreCase("MESSAGE")) {
+                                 
+
+                        if(str.split(" ")[1].equalsIgnoreCase("-all")  && user.equalsIgnoreCase("root"))
+                        {
+                             
+                        
+                        String message = str.toLowerCase().split("message", 2)[1];
+                        String tag = message.split(" ")[1];
+                        String message2 = message.toLowerCase().split(tag, 2)[1];
+                        
+                        
+
+                        who = "john sally qiang";
+                        from = user;
+
+                        mess = message2;
+                        
+                        
+
+                        dout.writeUTF("message sent");
+                        dout.flush();
+                        }
+                        else if(str.split(" ")[1] == "-all"){
+                            dout.writeUTF("not the root user");
+                        dout.flush();
+                        }
+                        else{// no all
+                            
+                        
+                        
+                        
+                        String message = str.toLowerCase().split("message", 2)[1];
+                        String tag = message.split(" ")[1];
+                        String message2 = message.toLowerCase().split(tag, 2)[1];
+                        
+                        
+
+                        who = tag;
+                        from = user;
+
+                        mess = message2;
+                        
+                        
+
+                        dout.writeUTF("message sent");
+                        dout.flush();
+                        }
+                    }
+                    
+                   
                     //invalid command statement
                     else {
                        dout.writeUTF("300 invalid command!");
                         dout.flush();
                     }
+                    
+                    
                 }
+                
+                
             }
         }
         catch(IOException ex) {
@@ -208,5 +305,7 @@ public class ClientHandler implements Runnable {
             System.exit(0);
         }
     }
+    
+    
     
 }//end ClientHandler

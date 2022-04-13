@@ -1,1 +1,11 @@
 radius 10: Circle’s circumference is 62.83 and area is 314.16
+
+radius 3: Circle’s circumference is 18.85 and area is 28.27Error: No radius found
+
+radius 5: Circle’s circumference is 31.42 and area is 78.54
+radius 3: Circle’s circumference is 18.85 and area is 28.27
+radius 5: Circle’s circumference is 31.42 and area is 78.54
+radius 4: Circle’s circumference is 25.13 and area is 50.27
+radius 3: Circle’s circumference is 18.85 and area is 28.27
+radius 4: Circle’s circumference is 25.13 and area is 50.27
+radius 6: Circle’s circumference is 37.70 and area is 113.10
