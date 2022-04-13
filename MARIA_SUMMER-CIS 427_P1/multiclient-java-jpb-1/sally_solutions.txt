@@ -1,0 +1,2 @@
+
+sides 3 5: Rectangle’s perimeter is 16.00 and area is 15.00

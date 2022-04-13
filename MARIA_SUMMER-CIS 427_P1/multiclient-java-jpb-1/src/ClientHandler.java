@@ -217,7 +217,7 @@ public class ClientHandler implements Runnable {
                     } 
                     //LIST command, outputs everything client logged in has ever done if they write "LIST"
                     else if (l.equalsIgnoreCase("list")) {//str.startsWith("LIST")) {
-                        if (str.equals("LIST")) {
+                        if (str.equalsIgnoreCase("LIST")) {
                             Scanner sc = new Scanner(new File(user + "_solutions.txt"));
                             String result = user + "\n";
                             while (sc.hasNextLine()) {
