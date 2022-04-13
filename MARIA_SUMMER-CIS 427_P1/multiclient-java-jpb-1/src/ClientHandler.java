@@ -21,6 +21,7 @@ public class ClientHandler implements Runnable {
     public static String who = " ";
         public static String mess;
                 public static String from;
+                public static String whoisloggedin = "";
     
     //create an instance
     public ClientHandler(int clientNumber, Socket socket, ServerSocket serverSocket) {
@@ -71,6 +72,7 @@ public class ClientHandler implements Runnable {
                         dout.writeUTF(user);
                         dout.writeUTF("SUCCESS\nPlease type 'SOLVE' followed by -c or -r (for circle or rectangle), and then the number and hit enter!"); //output message after sucessful login, instructing user on next steps
                         dout.flush();
+                        whoisloggedin = whoisloggedin + " " + user;
                     } else {
                         dout.writeUTF(" ");
                         dout.writeUTF("FAILURE: Please provide correct username and password. Try again"); //if login attempt with an account not in logins.txt
@@ -104,11 +106,26 @@ public class ClientHandler implements Runnable {
                     dout.writeUTF("no messages\n");
                         dout.flush();
                 }
-                //shutdown command, system closes if "SHUTDOWN" is entered
+                // command, system closes if "SHUTDOWN" is entered
                 if (loggedIn) {
                     if (str.equalsIgnoreCase("SHUTDOWN")) {
                         dout.writeUTF("200 ok");
+                        
                         dout.flush();
+                        String new_str = "";
+ String msg[] = whoisloggedin.split(" ");
+        // Iterating the string using for each loop
+        for (String words : msg) {
+ 
+            // If desired word is found
+            if (!words.equals(user)) {
+ 
+                // Concat the word not equal to the given
+                // word
+                new_str += words + " ";
+            }
+        }
+        whoisloggedin = new_str;
                         din.close();
                         s.close();
                         ss.close();
@@ -119,6 +136,22 @@ public class ClientHandler implements Runnable {
                     else if (str.equalsIgnoreCase("LOGOUT")) {
                         dout.writeUTF("200 ok");
                         dout.flush();
+                        
+                        String new_str = "";
+ String msg[] = whoisloggedin.split(" ");
+        // Iterating the string using for each loop
+        for (String words : msg) {
+ 
+            // If desired word is found
+            if (!words.equals(user)) {
+ 
+                // Concat the word not equal to the given
+                // word
+                new_str += words + " ";
+            }
+        }
+        whoisloggedin = new_str;
+                                                
                     }
                     //SOLVE command
                     else if (l.equalsIgnoreCase("solve")) {//str.startsWith("SOLVE")) {
@@ -241,9 +274,14 @@ public class ClientHandler implements Runnable {
 
                         mess = message2;
                         
-                        
-
-                        dout.writeUTF("message sent");
+                        String sending =" ";
+if(whoisloggedin.contains("john"))
+    sending = sending + "john ";
+if(whoisloggedin.contains("sally"))
+    sending = sending + "sally ";
+if(whoisloggedin.contains("qiang"))
+    sending = sending + "qiang ";
+                        dout.writeUTF("sending to" + sending);
                         dout.flush();
                         }
                         else if(str.split(" ")[1] == "-all"){
@@ -266,10 +304,16 @@ public class ClientHandler implements Runnable {
 
                         mess = message2;
                         
-                        
-
-                        dout.writeUTF("message sent");
+                        if(whoisloggedin.contains(who))
+                        {
+                        dout.writeUTF("sending to " + who);
                         dout.flush();
+                        }
+                        else
+                        {
+                            dout.writeUTF( who + " is not logged in");
+                        dout.flush();
+                        }
                         }
                     }
                     

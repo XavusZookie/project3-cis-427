@@ -53,11 +53,13 @@ public static int dummy = 1;
                 
                  
                 
-                if (response.equalsIgnoreCase("200 ok")) {
+                if (command.equalsIgnoreCase("shutdown") || command.equalsIgnoreCase("logout")) {
+                System.out.println("200 ok");
+
                     dout.close();
                     s.close();
                     System.exit(0);
-                    
+                  
                 }
                 System.out.println(response);
                 
