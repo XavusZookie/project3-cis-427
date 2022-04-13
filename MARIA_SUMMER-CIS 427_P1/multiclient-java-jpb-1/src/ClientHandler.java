@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable {
                     continue;
                 }
                 
-                if(who.contains(user))
+                if(who.contains(user))//if the users name is in the address for message return to the client the message
                 {
                 dout.writeUTF("message from :" + from + "\n" + mess);
                         dout.flush();
@@ -89,7 +89,7 @@ public class ClientHandler implements Runnable {
         String new_str = "";
  
         // Iterating the string using for each loop
-        for (String words : msg) {
+        for (String words : msg) {// take your name out of the list sine you viewed it already
  
             // If desired word is found
             if (!words.equals(user)) {
@@ -101,7 +101,7 @@ public class ClientHandler implements Runnable {
         }
         who = new_str;
                 }
-                else
+                else // if youre not in the address list there are no messages for you
                 {
                     dout.writeUTF("no messages\n");
                         dout.flush();
@@ -113,7 +113,7 @@ public class ClientHandler implements Runnable {
                         
                         dout.flush();
                         String new_str = "";
- String msg[] = whoisloggedin.split(" ");
+ String msg[] = whoisloggedin.split(" ");//if youre leaving the server you need to take your name off the list of who is logged in 
         // Iterating the string using for each loop
         for (String words : msg) {
  
@@ -138,7 +138,7 @@ public class ClientHandler implements Runnable {
                         dout.flush();
                         
                         String new_str = "";
- String msg[] = whoisloggedin.split(" ");
+ String msg[] = whoisloggedin.split(" ");//taking name off
         // Iterating the string using for each loop
         for (String words : msg) {
  
@@ -256,39 +256,40 @@ public class ClientHandler implements Runnable {
                             }
                         }
                     }
-                    else if (l.equalsIgnoreCase("MESSAGE")) {
+                    else if (l.equalsIgnoreCase("MESSAGE")) {//when the client wants to message
                                  
 
-                        if(str.split(" ")[1].equalsIgnoreCase("-all")  && user.equalsIgnoreCase("root"))
+                        if(str.split(" ")[1].equalsIgnoreCase("-all")  && user.equalsIgnoreCase("root"))//check if the root is sending a message to all
                         {
                              
                         
-                        String message = str.toLowerCase().split("message", 2)[1];
+                        String message = str.toLowerCase().split("message", 2)[1];//split up the line into the parts you ened
+
                         String tag = message.split(" ")[1];
                         String message2 = message.toLowerCase().split(tag, 2)[1];
                         
                         
 
-                        who = "john sally qiang";
+                        who = "john sally qiang";//put the message and addresses into variables
                         from = user;
 
                         mess = message2;
                         
-                        String sending =" ";
+                        String sending =" ";//combine the names into a variable of who were sending to
 if(whoisloggedin.contains("john"))
     sending = sending + "john ";
 if(whoisloggedin.contains("sally"))
     sending = sending + "sally ";
 if(whoisloggedin.contains("qiang"))
     sending = sending + "qiang ";
-                        dout.writeUTF("sending to" + sending);
+                        dout.writeUTF("sending to" + sending);//notify the sender it worked
                         dout.flush();
                         }
-                        else if(str.split(" ")[1] == "-all"){
+                        else if(str.split(" ")[1] == "-all"){//youre not root
                             dout.writeUTF("not the root user");
                         dout.flush();
                         }
-                        else{// no all
+                        else{// no all but message one person 
                             
                         
                         
@@ -304,14 +305,14 @@ if(whoisloggedin.contains("qiang"))
 
                         mess = message2;
                         
-                        if(whoisloggedin.contains(who))
+                        if(whoisloggedin.contains(who))//the person is logged in
                         {
                         dout.writeUTF("sending to " + who);
                         dout.flush();
                         }
                         else
                         {
-                            dout.writeUTF( who + " is not logged in");
+                            dout.writeUTF( who + " is not logged in");//not logged in
                         dout.flush();
                         }
                         }

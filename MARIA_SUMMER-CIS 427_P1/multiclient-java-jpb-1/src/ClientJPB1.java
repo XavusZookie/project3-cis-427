@@ -43,7 +43,7 @@ public static int dummy = 1;
                 dout.writeUTF(command);
                 dout.flush();
                 
-                if(user == null)
+                if(user == null)//get the username
                 {                          
                 response = din.readUTF();
                 user = response;
@@ -56,7 +56,7 @@ public static int dummy = 1;
                 if (command.equalsIgnoreCase("shutdown") || command.equalsIgnoreCase("logout")) {
                 System.out.println("200 ok");
 
-                    dout.close();
+                    dout.close();//close the client
                     s.close();
                     System.exit(0);
                   
@@ -65,23 +65,15 @@ public static int dummy = 1;
                 
                 //String[] thedata = MultiServerJPB1.talkgetter(user);
                 
-                 if (dummy ==1)
+                 if (dummy ==1)//skip the first message check for loggin in 
                     {
                         dummy = 0;
                         continue;
                     }
-                response = din.readUTF();
+                response = din.readUTF();//get the input for the messages, will either be a message or no messages
                 System.out.println(response);
                   
-                /*if(thedata[0].contains(user))
-                {
-                    
-                    System.out.println("message from " + thedata[1] + ": ");
-                    System.out.println(thedata[2]);
-                    
-                    
-
-                }*/
+                
         
       
         
